@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  plugin_test:
+    name: asdf plugin test
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: asdf-vm/actions/setup@v4
+      - name: asdf_plugin_test
+        run: |
+          asdf plugin add flyway https://github.com/lakshanwd/asdf-flyway.git
+          asdf install flyway latest
+          asdf set -u flyway latest
+          flyway --version
